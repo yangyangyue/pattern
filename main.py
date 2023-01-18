@@ -1,3 +1,10 @@
+#
+# Written by Lily <3477408934@qq.com>
+# 接收用户参数, 调用算法, 训练模型, 计算指标
+# github: https://github.com/yangyangyue/pattern.git
+# ps: MNIST统一使用torch内置的数据集
+
+
 import pickle
 
 import numpy as np
@@ -8,11 +15,6 @@ from torchvision import datasets, transforms
 
 from classifier import KNNClassifier, CNNClassifier, RandomForestClassifier
 import click
-
-"""
-主函数，负责接收参数, 调用算法, 计算准确率
-ps: MNIST统一使用torch内置的数据集，避免没必要的逻辑
-"""
 
 
 @click.group(invoke_without_command=True)

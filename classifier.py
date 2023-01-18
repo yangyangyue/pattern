@@ -1,5 +1,10 @@
+#
+# Written by Lily <3477408934@qq.com>
+# 实现RF分类器, KNN分类器和CNN分类器
+# github: https://github.com/yangyangyue/pattern.git
+
+
 import random
-from abc import ABCMeta, abstractmethod
 from collections import Counter
 
 import numpy as np
