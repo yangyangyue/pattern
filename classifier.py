@@ -1,5 +1,5 @@
 #
-# Written by Lily <3477408934@qq.com>
+# Written by Lily <chengyangli@ncepu.edu.cn>
 # 实现RF分类器, KNN分类器和CNN分类器
 # github: https://github.com/yangyangyue/pattern.git
 
@@ -78,13 +78,13 @@ class RandomForestClassifier:
         :param targets: 训练集标签, shape:(m,)
         """
         samples = samples.reshape((len(samples), -1))
-        print("随机森林模型训练中, 进度:", end=" 0.00")
+        print("随机森林训练中, 进度:", end=" 0.00", flush=True)
         for i in range(self.n_trees):
             # 随机生成子数据集的索引，用于构造训练每颗树的数据集
             idxs = random.sample(range(len(targets)), int(len(targets) * self.sample_rate))
             self.trees.append(self.__build_tree(samples[idxs], targets[idxs], 0))
-            print(f"\b\b\b\b{(i+1) / self.n_trees:.2f}", end="")
-        print(f"\n随机森林训练完成, 决策树数：{self.n_trees}")
+            print(f"\b\b\b\b{(i+1) / self.n_trees:.2f}", end="", flush=True)
+        print(f"\r随机森林训练完成, 决策树数：{self.n_trees}")
 
     def __build_tree(self, samples, targets, depth):
         """

@@ -1,5 +1,5 @@
 #
-# Written by Lily <3477408934@qq.com>
+# Written by Lily <chengyangli@ncepu.edu.cn>
 # 接收用户参数, 调用算法, 训练模型, 计算指标
 # github: https://github.com/yangyangyue/pattern.git
 # ps: MNIST统一使用torch内置的数据集
@@ -106,7 +106,8 @@ def cnn(his, check, lr, drop, epochs):
             train_acc = 0
             test_loss = 0
             test_acc = 0
-            print(f"CNN第{epoch}轮训练开始", end='...')
+            print(f"CNN第{epoch}轮训练中, 进度:", end='     ', flush=True)
+            i = 0
             for imgs, targets in train_loader:
                 imgs, targets = imgs.to(device), targets.to(device)
                 pred = classifier(imgs)
@@ -117,16 +118,21 @@ def cnn(his, check, lr, drop, epochs):
                 # 指标
                 train_loss += loss
                 train_acc += (torch.argmax(pred, dim=1) == targets).sum()
+                i += 1
+                print(f"\b\b\b\b{i / len(train_loader):.2f}", end="", flush=True)
             # 更新学习率
             lr_scheduler.step()
-            print(f"\b\b\b\b\b结束, 训练误差： {train_loss / len(train_loader)}; 训练准确率：{train_acc / len(train_data)}")
-            print(f"CNN第{epoch}轮测试开始", end='...')
+            print(f"\rCNN第{epoch}轮训练完成, 训练误差： {train_loss / len(train_loader)}; 训练准确率：{train_acc / len(train_data)}")
+            print(f"CNN第{epoch}轮测试中, 进度:", end='     ', flush=True)
+            i = 0
             with torch.no_grad():
                 for imgs, targets in test_loader:
                     pred = classifier(imgs)
                     test_loss += loss_fn(pred, targets)
                     test_acc += (torch.argmax(pred, dim=1) == targets).sum()
-            print(f"\b\b\b\b\b结束, 测试误差：{test_loss / len(test_loader)}; 测试准确率：{test_acc / len(test_data)}")
+                    i += 1
+                    print(f"\b\b\b\b{i / len(test_loader):.2f}", end="", flush=True)
+            print(f"\rCNN第{epoch}轮测试完成, 测试误差：{test_loss / len(test_loader)}; 测试准确率：{test_acc / len(test_data)}")
 
             # 每轮保存一次模型、优化器及当前轮数，任务比较简单，不需要特别地保存训练效果最佳的模型
             checkpoint = {'model_state': classifier.state_dict(), 'epoch': epoch, 'optimizer': optimizer.state_dict(), }
@@ -155,6 +161,7 @@ def rf(his, n_trees):
             classifier = RandomForestClassifier(n_trees=n_trees)
             classifier.fit(train_data.data.numpy(), train_data.targets.numpy())
             pickle.dump(classifier, f)
+            print("RF模型测试中， 进度:", end="     ", flush=True)
     # 测试
     t = 0
     i = 0
